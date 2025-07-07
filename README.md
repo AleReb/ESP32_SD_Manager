@@ -1,69 +1,60 @@
-# ESP32 SD Manager
+# ESP32 SD Manager V0.2
 
-A lightweight web-based SD card file manager for ESP32. This small library exposes a Wi‑Fi access point and an HTTP server that allows you to:
+**Lightweight web-based SD card file manager for ESP32**
 
-- List files on an SD card, showing name and size
-- Download files with progress indication
-- Upload new files with progress bar
-- Rename or delete existing files via web UI
+ESP32 SD Manager creates a standalone Wi-Fi Access Point and HTTP server
+to manage files on a microSD card from any browser—no external network needed.
 
-## Features
+## 🚀 Features
 
-1. **Standalone AP & server**: No internet connection required. ESP32 creates an AP named `ESP32 SD Manager`.
-2. **Modern Web UI**: HTML/CSS/JavaScript with progress bars and action buttons.
-3. **Single-header integration**: Copy the `.ino` sketch into your project and call `setupSDWebManager()` from `setup()`.
+1. **Standalone AP & HTTP Server**  
+   - ESP32 in AP mode (default SSID `ESP32_SD_ManagerV0.2`)  
+   - No internet connection required  
 
-## Hardware
+2. **Modern Web UI**  
+   - HTML/CSS/JavaScript  
+   - Progress bars for uploads/downloads  
+   - Action buttons for folder navigation, file ops  
 
-- **ESP32** (any board with HSPI pins available)
+3. **Complete File Operations**  
+   - List files/directories (with size)  
+   - Download files with progress indication  
+   - View text (txt, csv, log, json, xml, html, js, css, md)  
+   - View images (jpg, png, gif, bmp)  
+   - Upload new files (drag & drop style)  
+   - Create folders, rename, delete (recursive for directories)
+
+4. **Safety & Info Notices**  
+   - Warnings before deleting entire folders  
+   - Info panel for supported file types
+
+5. **Single-Header Integration**  
+   - Copy the `.ino` sketch into any project  
+   - Optionally extract into `setupSDWebManager()` for reuse
+
+## 📋 Hardware
+
+- **ESP32** (any board with HSPI pins)
 - **MicroSD card module** wired to HSPI:
-  - **SD_MISO** ➔ GPIO 2
-  - **SD_MOSI** ➔ GPIO 15
-  - **SD_SCLK** ➔ GPIO 14
-  - **SD_CS**   ➔ GPIO 13
 
-## Installation
+  | Signal | ESP32 Pin |
+  |--------|-----------|
+  | MISO   | GPIO19    |
+  | MOSI   | GPIO23    |
+  | SCLK   | GPIO18    |
+  | CS     | GPIO5     |
 
-1. Clone or download this repository.
-2. Copy `SdWebFileList.ino` into your Arduino sketch folder.
-3. Include required libraries in Arduino IDE:
+> **Tip:** Use the secondary HSPI SPIClass (`spiSD`) for SD to avoid conflicts.
+
+## ⚙️ Installation
+
+1. **Clone** or download this repository.  
+2. **Copy** `SDManager.ino` into your Arduino sketch folder.  
+3. **Include** required libraries:
+
    ```cpp
    #include <WiFi.h>
    #include <WebServer.h>
    #include <SD.h>
    #include <SPI.h>
    #include <FS.h>
-   ```
-
-## Usage
-
-1. **Customize** (optional): change `ssid` and `password` constants in the sketch.
-2. **Upload** to ESP32 via Arduino IDE.
-3. **Power on** and wait for serial output:
-   ```
-   SD initialized
-   AP IP: 192.168.4.1
-   HTTP server started
-   ```
-4. **Connect** your computer or smartphone to Wi‑Fi network `ESP32 SD Manager` (default password `12345678`).
-5. **Browse** to `http://192.168.4.1/` to manage SD card files.
-
-## Integration as Function
-
-Extract the web‑manager logic into a function:
-```cpp
-void setupSDWebManager() {
-  // SD & SPI init, Wi‑Fi AP, server routes, server.begin()
-}
-```
-Call in `setup()`:
-```cpp
-void setup() {
-  Serial.begin(115200);
-  setupSDWebManager();
-}
-```
-
-## License
-
-MIT © 2025
